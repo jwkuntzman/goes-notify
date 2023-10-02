@@ -9,6 +9,6 @@
   "gmail_sender": "",
   "gmail_app_password": "",
 
-  "weekday_earliest_hour": 13,
+  "weekday_earliest_hour": 0,
   "weekend_earliest_hour": 0
 }
