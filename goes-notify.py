@@ -35,9 +35,7 @@ def filter(settings, dtp):
     latest_date = datetime.strptime(settings['latest_interview_date'], '%B %d, %Y')
     if latest_date <= dtp:
         return False
-    if dtp.hour <= settings['weekday_earliest_hour'] and dtp.weekday() <= 5:
-        return False
-    if dtp.hour <= settings['weekend_earliest_hour'] and dtp.weekday() > 5:
+    if dtp.hour <= settings['weekday_earliest_hour']:
         return False
     return True
 
