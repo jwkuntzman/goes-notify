@@ -17,16 +17,23 @@ https://github.com/davidofwatkins/ge-cancellation-checker
 Run the script with `python`: `python3 goes-notify.py`
 
 Config Options:
+
 latest_interview_date   - Interviews beyond this date will be dropped. E.g., "December 10, 2099"
+
 enrollment_location_id  - List of locations to check.
+
 no_spamming             - If false it will alert multiple times for same appointment.
+
 poll_interval           - Time in seconds between each poll of the TTP API.
 
 gmail_recipients        - List of emails to alert of found interviews
+
 gmail_sender            - This is the login username for user's gmail
+
 gmail_app_password      - This is the login password for user's gmail.
 
 weekday_earliest_hour   - Filter out weekday appointments prior to provided hour based on a 24 hour clock (0-23)
+
 weekend_earliest_hour   - Same as above but for the weekend
 
 Note: if you have two-factor authentication enabled for your account, you'll need to [generate an app-specific password](https://myaccount.google.com/apppasswords) and add that to `config.json`.
