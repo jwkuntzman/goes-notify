@@ -1,0 +1,446 @@
+[
+  {
+    "id": 5001,
+    "name": "Hidalgo Enrollment Center"
+  },
+  {
+    "id": 5002,
+    "name": "Otay Mesa Enrollment Center"
+  },
+  {
+    "id": 5003,
+    "name": "Brownsville Enrollment Center"
+  },
+  {
+    "id": 5004,
+    "name": "Laredo Enrollment Center"
+  },
+  {
+    "id": 5005,
+    "name": "El Paso Enrollment Center"
+  },
+  {
+    "id": 5006,
+    "name": "Calexico Enrollment Center"
+  },
+  {
+    "id": 5007,
+    "name": "Nogales, AZ"
+  },
+  {
+    "id": 5021,
+    "name": "Champlain Enrollment Center"
+  },
+  {
+    "id": 5023,
+    "name": "Detroit Enrollment Center Global Entry"
+  },
+  {
+    "id": 5024,
+    "name": "Port Huron Enrollment Center"
+  },
+  {
+    "id": 5060,
+    "name": "Warroad Enrollment Center "
+  },
+  {
+    "id": 5080,
+    "name": "Sault Ste Marie Enrollment Center"
+  },
+  {
+    "id": 5120,
+    "name": "Sweetgrass NEXUS and FAST Enrollment Center"
+  },
+  {
+    "id": 5140,
+    "name": "JFK International Global Entry EC"
+  },
+  {
+    "id": 5141,
+    "name": "Houston Intercontinental Global Entry EC"
+  },
+  {
+    "id": 5142,
+    "name": "Washington Dulles International Global Entry EC"
+  },
+  {
+    "id": 5161,
+    "name": "Niagara Falls Enrollment Center"
+  },
+  {
+    "id": 5180,
+    "name": "Los Angeles International Global Entry EC"
+  },
+  {
+    "id": 5181,
+    "name": "Miami International Airport"
+  },
+  {
+    "id": 5182,
+    "name": "Atlanta International Global Entry EC"
+  },
+  {
+    "id": 5183,
+    "name": "Chicago O'Hare International Global Entry EC "
+  },
+  {
+    "id": 5223,
+    "name": "Derby Line Enrollment Center"
+  },
+  {
+    "id": 5300,
+    "name": "Dallas-Fort Worth International Airport Global Entry"
+  },
+  {
+    "id": 5320,
+    "name": "Detroit Metro Airport"
+  },
+  {
+    "id": 5340,
+    "name": "Honolulu Enrollment Center"
+  },
+  {
+    "id": 5360,
+    "name": "Las Vegas Enrollment Center"
+  },
+  {
+    "id": 5380,
+    "name": "Orlando International Airport"
+  },
+  {
+    "id": 5400,
+    "name": "San Juan Global Entry Enrollment Center"
+  },
+  {
+    "id": 5420,
+    "name": "Seatac International Airport Global Entry EC"
+  },
+  {
+    "id": 5441,
+    "name": "Boston-Logan Global Entry Enrollment Center"
+  },
+  {
+    "id": 5443,
+    "name": "Fort Lauderdale Global Entry Enrollment Center"
+  },
+  {
+    "id": 5444,
+    "name": "Newark Liberty Intl Airport"
+  },
+  {
+    "id": 5445,
+    "name": "Philadelphia International Airport"
+  },
+  {
+    "id": 5446,
+    "name": "San Francisco Global Entry Enrollment Center"
+  },
+  {
+    "id": 5447,
+    "name": "Sanford Global Entry Enrollment Center"
+  },
+  {
+    "id": 5460,
+    "name": "San Luis Enrollment Center"
+  },
+  {
+    "id": 5500,
+    "name": "Calais Enrollment Center"
+  },
+  {
+    "id": 5520,
+    "name": "Lansdowne (Thousand Islands Bridge)"
+  },
+  {
+    "id": 6480,
+    "name": "U.S. Custom House - Bowling Green"
+  },
+  {
+    "id": 6840,
+    "name": "Minneapolis - St. Paul Global Entry EC"
+  },
+  {
+    "id": 6920,
+    "name": "Doha International Airport"
+  },
+  {
+    "id": 6940,
+    "name": "Denver International Airport"
+  },
+  {
+    "id": 7160,
+    "name": "Phoenix Sky Harbor Global Entry Enrollment Center"
+  },
+  {
+    "id": 7480,
+    "name": "Houston Hobby Airport Enrollment Center"
+  },
+  {
+    "id": 7520,
+    "name": "San Antonio International Airport"
+  },
+  {
+    "id": 7540,
+    "name": "Anchorage Enrollment Center"
+  },
+  {
+    "id": 7600,
+    "name": "Salt Lake City International Airport"
+  },
+  {
+    "id": 7680,
+    "name": "Cincinnati Enrollment Center"
+  },
+  {
+    "id": 7740,
+    "name": "Milwaukee Enrollment Center"
+  },
+  {
+    "id": 7820,
+    "name": "Austin-Bergstrom International Airport"
+  },
+  {
+    "id": 7940,
+    "name": "Baltimore Washington Thurgood Marshall  Airport"
+  },
+  {
+    "id": 7960,
+    "name": "Portland, OR Enrollment Center"
+  },
+  {
+    "id": 8020,
+    "name": "Tampa Enrollment Center"
+  },
+  {
+    "id": 8040,
+    "name": "Albuquerque Enrollment Center"
+  },
+  {
+    "id": 8100,
+    "name": "Douglas Enrollment Center"
+  },
+  {
+    "id": 8120,
+    "name": "Washington, DC Enrollment Center"
+  },
+  {
+    "id": 8920,
+    "name": "Los Angeles -Long Beach Seaport "
+  },
+  {
+    "id": 9040,
+    "name": "Singapore (Singapore, U.S. Embassy) "
+  },
+  {
+    "id": 9101,
+    "name": "Grand Portage"
+  },
+  {
+    "id": 9140,
+    "name": "Guam International Airport"
+  },
+  {
+    "id": 9180,
+    "name": "Cleveland U.S. Customs and border protection"
+  },
+  {
+    "id": 9200,
+    "name": "Pittsburgh International Airport"
+  },
+  {
+    "id": 9240,
+    "name": "Tucson Enrollment Center"
+  },
+  {
+    "id": 9260,
+    "name": "West Palm Beach Enrollment Center"
+  },
+  {
+    "id": 9300,
+    "name": "Warwick, RI Enrollment Center"
+  },
+  {
+    "id": 9740,
+    "name": "New Orleans Enrollment Center"
+  },
+  {
+    "id": 10260,
+    "name": "Nashville Enrollment Center"
+  },
+  {
+    "id": 11000,
+    "name": "Moline Quad Cities International Airport"
+  },
+  {
+    "id": 11001,
+    "name": "Rockford-Chicago International Airport"
+  },
+  {
+    "id": 11002,
+    "name": "Peoria international airport"
+  },
+  {
+    "id": 11841,
+    "name": "Port Clinton, Ohio Enrollment Center"
+  },
+  {
+    "id": 11981,
+    "name": "Chicago Field Office Enrollment Center"
+  },
+  {
+    "id": 12021,
+    "name": "St. Louis Enrollment Center"
+  },
+  {
+    "id": 12161,
+    "name": "Boise Enrollment Center"
+  },
+  {
+    "id": 12781,
+    "name": "Kansas City Enrollment Center"
+  },
+  {
+    "id": 13321,
+    "name": "Blaine Global Entry Enrollment Center"
+  },
+  {
+    "id": 13621,
+    "name": "Memphis Intl Airport Global Enrollment Center"
+  },
+  {
+    "id": 14181,
+    "name": "International Falls Global Entry Enrollment Center"
+  },
+  {
+    "id": 14321,
+    "name": "Charlotte-Douglas International Airport"
+  },
+  {
+    "id": 14381,
+    "name": "Fairbanks Enrollment Center"
+  },
+  {
+    "id": 14481,
+    "name": "Gulfport-Biloxi Global Entry Enrollment Center"
+  },
+  {
+    "id": 14681,
+    "name": "Bradley International Airport Enrollment Center"
+  },
+  {
+    "id": 14981,
+    "name": "Richmond, VA Enrollment Center"
+  },
+  {
+    "id": 15221,
+    "name": "Pembina Global Entry Enrollment Center"
+  },
+  {
+    "id": 16226,
+    "name": "Eagle Pass "
+  },
+  {
+    "id": 16242,
+    "name": "Dayton Enrollment Center"
+  },
+  {
+    "id": 16248,
+    "name": "Treasure Coast International Airport"
+  },
+  {
+    "id": 16251,
+    "name": "Sweetgrass Global Entry Enrollment Center"
+  },
+  {
+    "id": 16271,
+    "name": "Tri-cities Enrollment Center"
+  },
+  {
+    "id": 16277,
+    "name": "Huntsville Global Entry Enrollment Center"
+  },
+  {
+    "id": 16278,
+    "name": "South Bend Enrollment Center"
+  },
+  {
+    "id": 16280,
+    "name": "Grand Forks, ND enrollment Center"
+  },
+  {
+    "id": 16282,
+    "name": "Mobile Regional Airport Enrollment Center"
+  },
+  {
+    "id": 16460,
+    "name": "Del Rio Enrollment Center"
+  },
+  {
+    "id": 16461,
+    "name": "Des Moines GE Enrollment Center"
+  },
+  {
+    "id": 16463,
+    "name": "Springfield Branson National Airport, MO"
+  },
+  {
+    "id": 16467,
+    "name": "Omaha, NE Enrollment Center"
+  },
+  {
+    "id": 16475,
+    "name": "SEAFO - Bozeman Airport"
+  },
+  {
+    "id": 16476,
+    "name": "SEAFO - FARGO Global Entry Workshop"
+  },
+  {
+    "id": 16482,
+    "name": "Grand Forks, ND Enrollment Event"
+  },
+  {
+    "id": 16485,
+    "name": "SEAFO - Billings-Logan Airport GE Mobile Event"
+  },
+  {
+    "id": 16488,
+    "name": "SEAFO - Missoula International Airport"
+  },
+  {
+    "id": 16515,
+    "name": "Fort Lauderdale International Airport Terminal"
+  },
+  {
+    "id": 16519,
+    "name": "Champlain GE Only"
+  },
+  {
+    "id": 16520,
+    "name": "Niagara Falls GE Only"
+  },
+  {
+    "id": 16546,
+    "name": "Ogdensburg Enrollment Center"
+  },
+  {
+    "id": 16547,
+    "name": "San Diego International Airport EC"
+  },
+  {
+    "id": 16555,
+    "name": "Norfolk EC"
+  },
+  {
+    "id": 16610,
+    "name": "BAL-FO Wilmington Delaware Enrollment Center"
+  },
+  {
+    "id": 16611,
+    "name": "BAL-FO Harrisburg Enrollment Center"
+  },
+  {
+    "id": 16631,
+    "name": "Albany Airport Enrollment 2023"
+  }
+]

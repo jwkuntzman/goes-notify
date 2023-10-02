@@ -1,0 +1,14 @@
+{
+  "latest_interview_date": "November 12, 2023",
+  "enrollment_location_id": [],
+
+  "no_spamming": true,
+  "poll_interval": 30,
+
+  "gmail_recipients": [""],
+  "gmail_sender": "",
+  "gmail_app_password": "",
+
+  "weekday_earliest_hour": 13,
+  "weekend_earliest_hour": 0
+}

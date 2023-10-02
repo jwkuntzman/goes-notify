@@ -1,197 +1,117 @@
 #!/usr/bin/env python
 
-# Note: for setting up email with sendmail, see: http://linuxconfig.org/configuring-gmail-as-sendmail-email-relay
-
 import argparse
-import commands
 import json
 import logging
-import smtplib
 import sys
-import os
-import glob
 import requests
-import hashlib
+import time
+import smtplib
+from email.mime.text import MIMEText
 
 from datetime import datetime
 from os import path
-from subprocess import check_output
-from distutils.spawn import find_executable
-from email.utils import formataddr
-from email.mime.text import MIMEText
-from email.mime.image import MIMEImage
-from email.mime.multipart import MIMEMultipart
-from math import log
 
-EMAIL_TEMPLATE = """
-<p>Good news! New Global Entry appointment(s) available at %s on the following dates:</p>
-%s
-<p>Your current appointment is on %s</p>
-<p>If this sounds good, please sign in to https://ttp.cbp.dhs.gov/ to reschedule.</p>
-"""
+foundApts = {}
+allLocationsList = []
+
 GOES_URL_FORMAT = 'https://ttp.cbp.dhs.gov/schedulerapi/slots?orderBy=soonest&limit=3&locationId={0}&minimum=1'
 
-def notify_send_email(dates, current_apt, settings, use_gmail=False):
-    sender = settings.get('email_from')
-    display_name = settings.get('email_display_name')
-    recipient = settings.get('email_to', sender)  # If recipient isn't provided, send to self.
-    location_id = settings.get("enrollment_location_id")
-    location_name = settings.get("enrollment_location_name")
-    if not location_name:
-            location_name = location_id
-
+def send_email(body, sender, recipients, password):
     try:
-        if use_gmail:
-            password = settings.get('gmail_password')
-            if not password:
-                logging.warning('Trying to send from gmail, but password was not provided.')
-                return
-            server = smtplib.SMTP('smtp.gmail.com', 587)
-            server.starttls()
-            server.login(sender, password)
-        else:
-            username = settings.get('email_username').encode('utf-8')
-            password = settings.get('email_password').encode('utf-8')
-            disable_tls = settings.get('email_disable_tls')
-            server = smtplib.SMTP(settings.get('email_server'), settings.get('email_port'))
-            server.ehlo()
-            if not disable_tls:
-                server.starttls()
-                server.ehlo()
-            if username:
-                    server.login(username, password)
-
-        subject = "Alert: Global Entry interview openings are available"
-
-        dateshtml = '<ul>'
-        for d in dates:
-            dateshtml += "<li>" + d + "</li>"
-
-        dateshtml += "</ul>"
-
-        message = EMAIL_TEMPLATE % (location_name, dateshtml, current_apt.strftime('%B %d, %Y'))
-
-        msg = MIMEMultipart()
+        subject = 'Global Entry Interview found'
+        msg = MIMEText(body)
         msg['Subject'] = subject
-        if display_name:
-            msg['From'] = formataddr((display_name, sender))
-        else: 
-            msg['From'] = sender
-        msg['To'] = ','.join(recipient)
-        msg['mime-version'] = "1.0"
-        msg['content-type'] = "text/html"
-        msg.attach(MIMEText(message, 'html'))
+        msg['From'] = sender
+        msg['To'] = ', '.join(recipients)
+        with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp_server:
+            smtp_server.login(sender, password)
+            smtp_server.sendmail(sender, recipients, msg.as_string())
+        logging.debug('Message sent!')
+    except (AttributeError):
+        logging.warning('Error occured when sending an email')
 
-        server.sendmail(sender, recipient, msg.as_string())
-        server.quit()
-    except Exception:
-        logging.exception('Failed to send succcess e-mail.')
-        log(e)
+def filter(settings, dtp):
+    latest_date = datetime.strptime(settings['latest_interview_date'], '%B %d, %Y')
+    if latest_date <= dtp:
+        return False
+    if dtp.hour <= settings['weekday_earliest_hour'] and dtp.weekday() <= 5:
+        return False
+    if dtp.hour <= settings['weekend_earliest_hour'] and dtp.weekday() > 5:
+        return False
+    return True
 
-def notify_osx(msg):
-    commands.getstatusoutput("osascript -e 'display notification \"%s\" with title \"Global Entry Notifier\"'" % msg)
-
-def notify_sms(settings, dates):
-    for avail_apt in dates: 
+def search(settings):
+    for location in settings['enrollment_location_id']:
         try:
-            from twilio.rest import Client
-        except ImportError:
-            logging.warning('Trying to send SMS, but TwilioRestClient not installed. Try \'pip install twilio\'')
-            return
+            # obtain the json from the web url
+            data = requests.get(GOES_URL_FORMAT.format(location)).json()
 
-        try:
-            account_sid = settings['twilio_account_sid']
-            auth_token = settings['twilio_auth_token']
-            from_number = settings['twilio_from_number']
-            to_number = settings['twilio_to_number']
-            assert account_sid and auth_token and from_number and to_number
-        except (KeyError, AssertionError):
-            logging.warning('Trying to send SMS, but one of the required Twilio settings is missing or empty')
-            return
+            # parse the json
+            if not data:
+                # Clear the found appointments, because they're all gone
+                logging.debug('No tests available at %s' % get_location_string(location))
+                foundApts[location] = []
+                continue
 
-        location_id = settings.get("enrollment_location_id")
-        location_name = settings.get("enrollment_location_name")
-        if not location_name:
-            location_name = location_id
+            dates = []
+            for o in data:
+                if o['active']:
+                    dt = o['startTimestamp'] #2017-12-22T15:15
+                    dtp = datetime.strptime(dt, '%Y-%m-%dT%H:%M')
+                    if filter(settings, dtp):
+                        dates.append(dtp.strftime('%A, %B %d @ %I:%M%p'))
 
-        # Twilio logs annoyingly, silence that
-        logging.getLogger('twilio').setLevel(logging.WARNING)
-        client = Client(account_sid, auth_token)
-        body = 'New GOES appointment available at %s on %s' % (location_name, avail_apt)
-        logging.info('Sending SMS.')
-        client.messages.create(body=body, to=to_number, from_=from_number)
+            # Add new dates
+            newApts = []
+            for date in dates:
+                if date not in foundApts[location]:
+                    # first time seeing that date, so add it to the lists
+                    foundApts[location].append(date)
+                    newApts.append(date)
 
-def main(settings):
-    try:
-        # obtain the json from the web url
-        data = requests.get(GOES_URL_FORMAT.format(settings['enrollment_location_id'])).json()
+            # Clean up unavailable appointments
+            for apt in foundApts[location]:
+                if apt not in dates:
+                    logging.info("Removing %s at %s" % (apt, get_location_string(location)))
+                    foundApts[location].remove(apt)
 
-    	# parse the json
-        if not data:
-            logging.info('No tests available.')
-            return
+            if dates and not settings['no_spamming']:
+                send_notification(settings, location, dates)
+            elif newApts:
+                send_notification(settings, location, newApts)
 
-        current_apt = datetime.strptime(settings['current_interview_date_str'], '%B %d, %Y')
-        dates = []
-        for o in data:
-            if o['active']:
-                dt = o['startTimestamp'] #2017-12-22T15:15
-                dtp = datetime.strptime(dt, '%Y-%m-%dT%H:%M')
-                if current_apt > dtp:
-                    dates.append(dtp.strftime('%A, %B %d @ %I:%M%p'))
+        except OSError:
+            logging.critical('Something went wrong when trying to obtain the openings')
 
-        if not dates:
-            return
+def send_notification(settings, location, dates):
+    msg = 'Found new appointment(s) in location %s on %s!' % (get_location_string(location), '\n'.join(dates))
+    logging.info(msg)
 
-        hash = hashlib.md5(''.join(dates) + current_apt.strftime('%B %d, %Y @ %I:%M%p')).hexdigest()
-        fn = "goes-notify_{0}.txt".format(hash)
-        if settings.get('no_spamming') and os.path.exists(fn):
-            return
-        else:
-            for f in glob.glob("goes-notify_*.txt"):
-                os.remove(f)
-            f = open(fn,"w")
-            f.close()
+    send_email(msg, settings['gmail_sender'], settings['gmail_recipients'], settings['gmail_app_password'])
 
-    except OSError:
-        logging.critical("Something went wrong when trying to obtain the openings")
-        return
-
-    location_id = settings.get("enrollment_location_id")
-    location_name = settings.get("enrollment_location_name")
-    if not location_name:
-            location_name = location_id
-    msg = 'Found new appointment(s) in location %s on %s (current is on %s)!' % (location_name, dates[0], current_apt.strftime('%B %d, %Y @ %I:%M%p'))
-    logging.info(msg + (' Sending email.' if not settings.get('no_email') else ' Not sending email.'))
-
-    if settings.get('notify_osx'):
-        notify_osx(msg)
-    if not settings.get('no_email'):
-        notify_send_email(dates, current_apt, settings, use_gmail=settings.get('use_gmail'))
-    if settings.get('twilio_account_sid'):
-        notify_sms(settings, dates)
+def get_location_string(location):
+    return next((item for item in allLocationsList if item["id"] == int(location)), None)['name']
 
 def _check_settings(config):
     required_settings = (
-        'current_interview_date_str',
-        'enrollment_location_id'
+        'latest_interview_date',
+        'enrollment_location_id',
+        'poll_interval',
+        'gmail_recipients',
+        'gmail_sender',
+        'gmail_app_password',
+        'weekday_earliest_hour'
     )
 
     for setting in required_settings:
         if not config.get(setting):
             raise ValueError('Missing setting %s in config.json file.' % setting)
 
-    if config.get('no_email') == False and not config.get('email_from'): # email_to is not required; will default to email_from if not set
-        raise ValueError('email_to and email_from required for sending email. (Run with --no-email or no_email=True to disable email.)')
-
-    if config.get('use_gmail') and not config.get('gmail_password'):
-        raise ValueError('gmail_password not found in config but is required when running with use_gmail option')
-
 if __name__ == '__main__':
-
     # Configure Basic Logging
     logging.basicConfig(
-        level=logging.DEBUG,
+        level=logging.INFO,
         format='%(levelname)s: %(asctime)s %(message)s',
         datefmt='%m/%d/%Y %I:%M:%S %p',
         stream=sys.stdout,
@@ -200,10 +120,11 @@ if __name__ == '__main__':
     pwd = path.dirname(sys.argv[0])
 
     # Parse Arguments
-    parser = argparse.ArgumentParser(description="Command line script to check for goes openings.")
+    parser = argparse.ArgumentParser(description='Command line script to check for goes openings.')
     parser.add_argument('--config', dest='configfile', default='%s/config.json' % pwd, help='Config file to use (default is config.json)')
     arguments = vars(parser.parse_args())
-    logging.info("config file is:" + arguments['configfile'])
+    logging.debug('config file is:' + arguments['configfile'])
+
     # Load Settings
     try:
         with open(arguments['configfile']) as json_file:
@@ -227,6 +148,15 @@ if __name__ == '__main__':
         handler.setLevel(logging.DEBUG)
         logging.getLogger('').addHandler(handler)
 
-    logging.debug('Running cron with arguments: %s' % arguments)
+    logging.debug(settings)
 
-    main(settings)
+    with open('ttp.cbp.dhs.gov.json') as json_file:
+        allLocationsList = json.load(json_file)
+
+    for location in settings['enrollment_location_id']:
+        foundApts[location] = []
+
+    # Search until the day of the interview
+    while datetime.strptime(settings['latest_interview_date'], '%B %d, %Y') > datetime.now():
+        search(settings)
+        time.sleep(settings['poll_interval'])
