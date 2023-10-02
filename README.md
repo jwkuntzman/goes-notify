@@ -8,7 +8,7 @@ https://github.com/davidofwatkins/ge-cancellation-checker
 # Getting started
 
 - Clone the repo
-- Enter required fields into `config.json`:
+- Enter fields into `config.json.example` and save as `config.json`:
   - Look up your enrollment center in the list below
   - Enter your current interview date in Month name-Day-Year format. E.g., "December 10, 2017"
 
