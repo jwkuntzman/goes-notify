@@ -8,29 +8,35 @@ https://github.com/davidofwatkins/ge-cancellation-checker
 # Getting started
 
 - Clone the repo
-- Enter required fields into `config.json`:
+- Enter fields into `config.json.example` and save as `config.json`:
   - Look up your enrollment center in the list below
   - Enter your current interview date in Month name-Day-Year format. E.g., "December 10, 2017"
 
 # Usage
 
-Run the script with `python`: `python2 goes-notify.py`
+Run the script with `python`: `python3 goes-notify.py`
 
-If you're running this on a machine you'll be using while it's searching, you can set the `no-email` config setting and receive a local macOS notification when the script finds a new appointment.
+Config Options:
 
-With the `use_gmail` config setting, you can send yourself an email when an appointment is found. Note: if you have two-factor authentication enabled for your account, you'll need to [generate an app-specific password](https://myaccount.google.com/apppasswords) and add that to `config.json`.
+latest_interview_date   - Interviews beyond this date will be dropped. E.g., "December 10, 2099"
 
-If you would like to check multiple nearby locations at once you need to make copies the original file you just edited and change the location code on each config file. Then in seperate windows run each copy of the diffrent locations. If you set `enrollment_location_name` in the config file, the alert message will display this name, otherwise the `enrollment_location_id` will be displayed. 
+enrollment_location_id  - List of locations to check.
 
-# Using Docker
+no_spamming             - If false it will alert multiple times for same appointment.
 
-This is the easiest way. Install docker (any operating system). Just make a copy of the config.json file, update it accordingly, and then run the below command:
+poll_interval           - Time in seconds between each poll of the TTP API.
 
-```
-docker run -d -v /path/to/config.json:/app/config.json drewster727/goes-notify
-```
+gmail_recipients        - List of emails to alert of found interviews
 
-----
+gmail_sender            - This is the login username for user's gmail
+
+gmail_app_password      - This is the login password for user's gmail.
+
+weekday_earliest_hour   - Filter out weekday appointments prior to provided hour based on a 24 hour clock (0-23)
+
+weekend_earliest_hour   - Same as above but for the weekend
+
+Note: if you have two-factor authentication enabled for your account, you'll need to [generate an app-specific password](https://myaccount.google.com/apppasswords) and add that to `config.json`.
 
 # GOES center codes
 
