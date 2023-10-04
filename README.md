@@ -34,8 +34,6 @@ gmail_app_password      - This is the login password for user's gmail.
 
 weekday_earliest_hour   - Filter out weekday appointments prior to provided hour based on a 24 hour clock (0-23)
 
-weekend_earliest_hour   - Same as above but for the weekend
-
 Note: if you have two-factor authentication enabled for your account, you'll need to [generate an app-specific password](https://myaccount.google.com/apppasswords) and add that to `config.json`.
 
 # GOES center codes
