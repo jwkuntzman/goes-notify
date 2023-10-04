@@ -7,6 +7,7 @@ import sys
 import requests
 import time
 import smtplib
+import os
 from email.mime.text import MIMEText
 
 from datetime import datetime
@@ -35,7 +36,9 @@ def filter(settings, dtp):
     latest_date = datetime.strptime(settings['latest_interview_date'], '%B %d, %Y')
     if latest_date <= dtp:
         return False
-    if dtp.hour <= settings['weekday_earliest_hour']:
+    if dtp.hour <= settings['weekday_filter_hour']:
+        return False
+    if dtp.weekday() in settings['weekday_filter_day']:
         return False
     return True
 
@@ -99,7 +102,7 @@ def _check_settings(config):
         'gmail_recipients',
         'gmail_sender',
         'gmail_app_password',
-        'weekday_earliest_hour'
+        'weekday_filter_hour'
     )
 
     for setting in required_settings:
@@ -115,21 +118,22 @@ if __name__ == '__main__':
         stream=sys.stdout,
     )
 
-    pwd = path.dirname(sys.argv[0])
+    pwd = path.dirname(__file__)
 
     # Parse Arguments
     parser = argparse.ArgumentParser(description='Command line script to check for goes openings.')
     parser.add_argument('--config', dest='configfile', default='%s/config.json' % pwd, help='Config file to use (default is config.json)')
     arguments = vars(parser.parse_args())
-    logging.debug('config file is:' + arguments['configfile'])
+    logging.info('config file is:' + arguments['configfile'])
 
     # Load Settings
     try:
         with open(arguments['configfile']) as json_file:
             settings = json.load(json_file)
+            logging.info(settings)
 
             # merge args into settings IF they're True
-            for key, val in arguments.iteritems():
+            for key, val in arguments.items():
                 if not arguments.get(key): continue
                 settings[key] = val
 
